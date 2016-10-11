@@ -32,7 +32,7 @@ public protocol Point: Overlay {
  A pin-shaped marker image.
  */
 @objc(MBMarkerImage)
-public class MarkerImage: NSObject {
+open class MarkerImage: NSObject {
     /**
      The size of a marker.
      */
@@ -86,14 +86,14 @@ public class MarkerImage: NSObject {
      
      By default, the marker is small.
      */
-    public var size: Size
+    open var size: Size
     
     /**
      A label or Maki icon to place atop the pin.
      
      By default, the marker has no label.
      */
-    public var label: Label?
+    open var label: Label?
     
     #if os(OSX)
     /**
@@ -108,7 +108,7 @@ public class MarkerImage: NSObject {
      
      By default, the marker is red.
      */
-    public var color: UIColor = .red()
+    open var color: UIColor = .red
     #endif
     
     /**
@@ -127,9 +127,9 @@ public class MarkerImage: NSObject {
  A pin-shaped marker placed at a specific point on the map.
  */
 @objc(MBMarker)
-public class Marker: MarkerImage, Point {
+open class Marker: MarkerImage, Point {
     /// The geographic coordinate to place the marker at.
-    public var coordinate: CLLocationCoordinate2D
+    open var coordinate: CLLocationCoordinate2D
     
     /**
      Initializes a red marker with the given options.
@@ -138,7 +138,7 @@ public class Marker: MarkerImage, Point {
      - parameter size: The size of the marker.
      - parameter label: A label or Maki icon to place atop the pin.
      */
-    private init(coordinate: CLLocationCoordinate2D,
+    fileprivate init(coordinate: CLLocationCoordinate2D,
                  size: Size = .small,
                  label: Label?) {
         self.coordinate = coordinate
@@ -155,7 +155,7 @@ public class Marker: MarkerImage, Point {
     public convenience init(coordinate: CLLocationCoordinate2D,
                             size: Size = .small,
                             letter: UniChar) {
-        self.init(coordinate: coordinate, size: size, label: .letter(Character(UnicodeScalar(letter))))
+        self.init(coordinate: coordinate, size: size, label: .letter(Character(UnicodeScalar(letter)!)))
     }
     
     /**
@@ -186,7 +186,7 @@ public class Marker: MarkerImage, Point {
         self.init(coordinate: coordinate, size: size, label: .iconName(iconName))
     }
     
-    public override var description: String {
+    open override var description: String {
         let labelComponent: String
         if let label = label {
             labelComponent = "-\(label)"
@@ -204,16 +204,16 @@ public class Marker: MarkerImage, Point {
  The marker image is always centered on the specified location. When creating an asymmetric marker like a pin, make sure that the tip of the pin is at the center of the image.
  */
 @objc(MBCustomMarker)
-public class CustomMarker: NSObject, Overlay {
+open class CustomMarker: NSObject, Overlay {
     /// The geographic coordinate to place the marker at.
-    public var coordinate: CLLocationCoordinate2D
+    open var coordinate: CLLocationCoordinate2D
     
     /**
      The HTTP or HTTPS URL of the image.
      
      The API caches custom marker images according to the `Expires` and `Cache-Control` headers. If you host the image on your own server, make sure that at least one of these headers is set to an proper value to prevent repeated requests for the image.
      */
-    public var url: URL
+    open var url: URL
     
     /**
      Initializes a marker with the given coordinate and image URL.
@@ -226,9 +226,9 @@ public class CustomMarker: NSObject, Overlay {
         self.url = url
     }
     
-    public override var description: String {
-        let escapedURL = url.absoluteString?.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet)!
-        return "url-\(escapedURL!)(\(coordinate.longitude),\(coordinate.latitude))"
+    open override var description: String {
+        let escapedURL = url.absoluteString.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet)!
+        return "url-\(escapedURL)(\(coordinate.longitude),\(coordinate.latitude))"
     }
 }
 
@@ -238,9 +238,9 @@ public class CustomMarker: NSObject, Overlay {
  GeoJSON features may be styled according to the [simplestyle specification](https://github.com/mapbox/simplestyle-spec).
  */
 @objc(MBGeoJSON)
-public class GeoJSON: NSObject, Overlay {
+open class GeoJSON: NSObject, Overlay {
     /// String representation of the GeoJSON object to display.
-    public var objectString: String
+    open var objectString: String
     
     var pm: String? {
         get {
@@ -251,7 +251,7 @@ public class GeoJSON: NSObject, Overlay {
         }
     }
     
-    public override var description: String {
+    open override var description: String {
         let escapedObjectString = objectString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
         return "geojson(\(escapedObjectString))"
     }
@@ -286,18 +286,18 @@ public class GeoJSON: NSObject, Overlay {
  A polyline or polygon placed along a path atop the map.
  */
 @objc(MBPath)
-public class Path: NSObject, Overlay {
+open class Path: NSObject, Overlay {
     /**
      An array of geographic coordinates defining the path of the overlay.
      */
-    public var coordinates: [CLLocationCoordinate2D]
+    open var coordinates: [CLLocationCoordinate2D]
     
     /**
      The stroke width of the overlay, measured in points.
      
      By default, the overlay is 1 point wide.
      */
-    public var strokeWidth: Int = 1
+    open var strokeWidth: Int = 1
     
     #if os(OSX)
     /**
@@ -319,14 +319,14 @@ public class Path: NSObject, Overlay {
      
      By default, the overlay is stroked with Davy’s gray (33% white).
      */
-    public var strokeColor = UIColor(hexString: "555")
+    open var strokeColor = UIColor(hexString: "555")
     
     /**
      The fill color of the overlay.
      
      By default, the overlay is filled with Davy’s gray (33% white).
      */
-    public var fillColor = UIColor(hexString: "555")
+    open var fillColor = UIColor(hexString: "555")
     #endif
     
     /**
@@ -334,14 +334,14 @@ public class Path: NSObject, Overlay {
      
      By default, the overlay’s stroke is completely opaque.
      */
-    public var strokeOpacity: Double = 1
+    open var strokeOpacity: Double = 1
     
     /**
      The fill opacity of the overlay, expressed as a percentage such that 0.0 is completely transparent and 1.0 is completely opaque.
      
      By default, the overlay’s fill is completely transparent.
      */
-    public var fillOpacity: Double = 0
+    open var fillOpacity: Double = 0
     
     /**
      Initializes a polyline overlay with the given vertices.
@@ -380,7 +380,7 @@ public class Path: NSObject, Overlay {
      
      - note: This initializer is intended for Objective-C usage. In Swift code, use the `coordinates.count` property.
      */
-    public var coordinateCount: UInt {
+    open var coordinateCount: UInt {
         return UInt(coordinates.count)
     }
     
@@ -393,14 +393,14 @@ public class Path: NSObject, Overlay {
      
      - note: This initializer is intended for Objective-C usage. In Swift code, use the `coordinates` property.
      */
-    public func getCoordinates(_ coordinates: UnsafeMutablePointer<CLLocationCoordinate2D>) {
+    open func getCoordinates(_ coordinates: UnsafeMutablePointer<CLLocationCoordinate2D>) {
         for i in 0..<self.coordinates.count {
             coordinates.advanced(by: i).pointee = self.coordinates[i]
         }
     }
     
     // based on https://github.com/mapbox/polyline
-    private func polylineEncode(_ coordinates: [CLLocationCoordinate2D]) -> String {
+    fileprivate func polylineEncode(_ coordinates: [CLLocationCoordinate2D]) -> String {
 
         func encodeCoordinate(_ coordinate: CLLocationDegrees) -> String {
 
@@ -415,11 +415,11 @@ public class Path: NSObject, Overlay {
             var output = ""
 
             while c >= 0x20 {
-                output += String(UnicodeScalar((0x20 | (c & 0x1f)) + 63))
+                output += String(describing: UnicodeScalar((0x20 | (c & 0x1f)) + 63))
                 c = c >> 5
             }
 
-            output += String(UnicodeScalar(c + 63))
+            output += String(describing: UnicodeScalar(c + 63))
 
             return output
         }
@@ -436,7 +436,7 @@ public class Path: NSObject, Overlay {
         return output
     }
     
-    public override var description: String {
+    open override var description: String {
         let encodedPolyline = polylineEncode(coordinates).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlPathAllowed)!
         return "path-\(strokeWidth)+\(strokeColor.toHexString())-\(strokeOpacity)+\(fillColor.toHexString())-\(fillOpacity)(\(encodedPolyline))"
     }

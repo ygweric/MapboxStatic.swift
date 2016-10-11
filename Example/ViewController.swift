@@ -11,7 +11,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         imageView = UIImageView(frame: view.bounds)
-        imageView.backgroundColor = UIColor.black()
+        imageView.backgroundColor = UIColor.black
         view.addSubview(imageView)
     }
 
@@ -30,7 +30,7 @@ class ViewController: UIViewController {
             url: url!)
         
         let geojsonOverlay: GeoJSON
-        let geojsonURL = NSURL(string: "http://git.io/vCv9U") as! URL
+        let geojsonURL = URL(string: "http://git.io/vCv9U")!
         let gjs = try! NSString(contentsOf: geojsonURL, usedEncoding: nil)
         geojsonOverlay = GeoJSON(objectString: gjs as String)
         
